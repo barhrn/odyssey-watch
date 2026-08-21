@@ -166,7 +166,8 @@ def notify(title, message, url=None):
         try:
             urllib.request.urlopen(req, timeout=15).read()
         except urllib.error.URLError as e:
-            print(f"warn: telegram send failed: {e}", file=sys.stderr)
+            # Loud on purpose: a silently broken token means missed screenings.
+            raise SystemExit(f"telegram send failed: {e}")
 
 
 # ------------------------------------------------------------------ state ----
