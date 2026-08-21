@@ -20,6 +20,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Without these, the run would consume the state silently and you would
+      # never hear about the screenings it just marked as seen.
+      - name: Require Telegram secrets
+        env:
+          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+        run: |
+          if [ -z "$TG_BOT_TOKEN" ] || [ -z "$TG_CHAT_ID" ]; then
+            echo "::error::Set the TG_BOT_TOKEN and TG_CHAT_ID repository secrets."
+            exit 1
+          fi
+
       - name: Check for new screenings
         env:
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
