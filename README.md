@@ -4,6 +4,8 @@ Notifies via Telegram when **new IMAX screenings of "The Odyssey"** open at
 **Planet Rishon LeZion** on a **Thursday or Friday** with room for 3 people.
 
 Runs on GitHub Actions every 15 minutes — no server, no laptop left open.
+**The repo must be public**: public repos get unlimited free Actions minutes,
+while a private one would exhaust the Free plan's 2,000 min/month in ~20 days.
 
 ## Setup
 
@@ -19,7 +21,7 @@ Runs on GitHub Actions every 15 minutes — no server, no laptop left open.
 
    ```sh
    git init && git add -A && git commit -m "odyssey watch"
-   gh repo create odyssey-watch --private --source=. --push
+   gh repo create odyssey-watch --public --source=. --push
    ```
 
 3. **Add the secrets**
@@ -59,5 +61,10 @@ All at the top of `odyssey_watch.py`:
   fraction of the hall still free), never the seat map — that endpoint is behind
   bot protection. `ASSUMED_CAPACITY` converts the ratio to a rough seat count,
   and it cannot tell whether free seats are *adjacent*.
-- GitHub pauses cron schedules on repos with no activity for 60 days. The state
-  commits usually keep it alive; if it goes quiet, hit *Run workflow* once.
+- Public repos have **unlimited free** Actions minutes on standard runners.
+  Secrets stay encrypted and are not exposed by making the repo public.
+- GitHub disables scheduled workflows in *public* repos after 60 days with no
+  repository activity. If alerts go quiet, hit *Run workflow* once to re-arm.
+- Cron runs are best-effort and get delayed when GitHub is busy, so the schedule
+  avoids the top of the hour. Do not count on catching a drop that sells out in
+  under a minute.

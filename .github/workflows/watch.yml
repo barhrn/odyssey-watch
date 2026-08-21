@@ -2,7 +2,9 @@ name: Odyssey IMAX watch
 
 on:
   schedule:
-    - cron: "*/15 * * * *"   # every 15 minutes (UTC; GitHub may delay under load)
+    # Every 15 minutes, deliberately off the top of the hour: GitHub delays
+    # scheduled runs under load, and :00 is the worst-hit slot.
+    - cron: "7,22,37,52 * * * *"
   workflow_dispatch:          # lets you trigger a run by hand from the Actions tab
 
 permissions:
